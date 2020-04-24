@@ -13,6 +13,7 @@ def build_pomdp(program):
     options.set_build_state_valuations()
     options.set_build_choice_labels()
     options.set_build_all_labels()
+    options.set_build_all_reward_models()
 
     model =  sp.build_sparse_model_with_options(program, options)
     model = sp.pomdp.make_canonic(model)
@@ -65,6 +66,20 @@ def main():
                 options.append(f"s={s}")
             file.write(" | ".join(options))
             file.write(";\n")
+
+        for reward_model_name in model.reward_models:
+            file.write(f"\nrewards \"{reward_model_name}\"\n")
+            rewmodel = model.get_reward_model(reward_model_name)
+            if rewmodel.has_transition_rewards:
+                raise RuntimeError("Transition rewards are not supported")
+            if rewmodel.has_state_action_rewards:
+                for state in model.states:
+                    for act in state.actions:
+                        file.write(f"\t[act{act}] s={state} : {rewmodel.get_state_action_reward(model.get_choice_index(int(state),act.id))};\n")
+            for state in model.states:
+                file.write(f"\ts={state} : {rewmodel.get_state_reward(state)};\n")
+            file.write("endrewards\n")
+
 
     logger.info("Check whether we can parse output...")
     # As a simple check, we control whether storm can parse the output.
