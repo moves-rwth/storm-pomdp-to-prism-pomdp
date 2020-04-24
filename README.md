@@ -1,27 +1,21 @@
-# storm-project-starter-python
-Starter project for the Python API of Storm via Stormpy
+# storm-pomdp-to-prism-pomdp
+
+This small tool on top of stormpy creates prism-pomdp compatible POMDP files in an explicit manner.
+We emphasise that the current transformation is so naive that we do not make this part of storm or stormpy. 
+The main goal is to create files that both storm and prism can use as import, while using some of the new modelling power of storm, and the assurance that actions are ordered. 
+
 
 ## Getting Started
 Before starting, make sure that Storm and stormpy are installed. If not, see the [documentation](https://moves-rwth.github.io/stormpy/installation.html) for details on how to install stormpy.
 
 First, install the Python package. If you use a virtual environment, make sure to use it.
-To install the starter package, execute
+To install, execute
 ```
 python setup.py develop
 ```
 
 Then, run the script using 
 ```
-python stormpy_starter/check.py --model examples/die.pm --property examples/die.pctl
+python pomdp-to-prism.py --input pomdp-in.pomdp  --output pomdp-out.pomdp
 ```
-The answer should be no.
 
-Then, run the script using 
-```
-python stormpy_starter/check.py --model examples/die.pm --property examples/die2.pctl
-```
-The answer should be yes.
-
-## What is next?
-You are all set to implement your own tools and algorithms on top of stormpy.
-Feel free to contribute your new algorithms to stormpy, such that others can enjoy them.
