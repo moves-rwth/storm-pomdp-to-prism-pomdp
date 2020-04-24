@@ -54,7 +54,17 @@ def main():
                     updates.append(f"{transition.value()} : (s'={next_state}) & (o'={model.get_observation(next_state)})")
                 file.write(" + ".join(updates))
                 file.write(";\n")
-        file.write("endmodule\n")
+        file.write("endmodule\n\n")
+
+        for label in model.labeling.get_labels():
+            if label in ["init", "deadlock"]:
+                continue
+            file.write(f"label \"{label}\" = ")
+            options = []
+            for s in model.labeling.get_states(label):
+                options.append(f"s={s}")
+            file.write(" | ".join(options))
+            file.write(";\n")
 
     logger.info("Check whether we can parse output...")
     # As a simple check, we control whether storm can parse the output.
