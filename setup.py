@@ -16,8 +16,6 @@ setup(
     description="Conversion script",
     long_description=long_description,
     long_description_content_type='text/markdown',
-
-    packages=["storm_pomdp_to_prism_pomdp"],
     install_requires=[
         "stormpy>=1.4.0"
     ],
