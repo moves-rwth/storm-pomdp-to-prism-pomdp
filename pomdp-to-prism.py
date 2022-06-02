@@ -35,10 +35,15 @@ def main():
         logging.basicConfig(format='%(message)s', level=logging.INFO)
 
 
-    logger.info("Parse input program...")
-    input_program = sp.parse_prism_program(args.input)
-    logger.info("Build pomdp...")
-    model = build_pomdp(input_program)
+    logger.info("Parse input...")
+    if args.input[-4:] == ".drn":
+        logger.info("We assume that the input is a drn file")
+        model = sp.build_model_from_drn(args.input)
+    else:
+        logger.info("We assume that the input is a Prism file")
+        input_program = sp.parse_prism_program(args.input)
+        logger.info("Build pomdp...")
+        model = build_pomdp(input_program)
 
     if len(model.initial_states) > 1:
         raise RuntimeError("We require a unique initial state")
